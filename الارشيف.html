@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أرشيف الموظفين - إمارة مكة</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            width: 120px; /* حجم الشعار */
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .header h2 {
+            display: inline-block;
+            color: #004d40;
+            vertical-align: middle;
+            margin: 0;
+            padding-left: 15px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            margin: 5px 0;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #00695c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #00695c;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e0f7fa;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 600px) {
+            input, button, table {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="OIP.JPG" alt="شعار إمارة مكة"> <!-- مسار الصورة -->
+            <h2>أرشيف الموظفين</h2>
+        </div>
+
+        <!-- البحث عن موظف -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="ابحث باسم الموظف" onkeyup="searchEmployee()">
+        </div>
+
+        <!-- جدول الموظفين -->
+        <table id="employeeTable">
+            <thead>
+                <tr>
+                    <th>اسم الموظف</th>
+                    <th>العمود</th>
+                    <th>رقم الرف</th>
+                    <th>رقم الأرشيف</th>
+                    <th>تحرير</th>
+                    <th>حذف</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>محمد أحمد</td>
+                    <td>1</td>
+                    <td>4</td>
+                    <td>23</td>
+                    <td><button onclick="editEmployee(this)">تعديل</button></td>
+                    <td><button onclick="deleteEmployee(this)">حذف</button></td>
+                </tr>
+                <tr>
+                    <td>سارة علي</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>12</td>
+                    <td><button onclick="editEmployee(this)">تعديل</button></td>
+                    <td><button onclick="deleteEmployee(this)">حذف</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- إضافة موظف جديد -->
+        <div class="form-container">
+            <h3>إضافة موظف جديد</h3>
+            <input type="text" id="employeeName" placeholder="اسم الموظف">
+            <input type="number" id="columnNumber" placeholder="العمود">
+            <input type="number" id="shelfNumber" placeholder="رقم الرف">
+            <input type="number" id="archiveNumber" placeholder="رقم الأرشيف">
+            <button onclick="addEmployee()">إضافة</button>
+        </div>
+    </div>
+
+    <script>
+        // دالة لإضافة موظف جديد
+        function addEmployee() {
+            var name = document.getElementById("employeeName").value;
+            var column = document.getElementById("columnNumber").value;
+            var shelf = document.getElementById("shelfNumber").value;
+            var archive = document.getElementById("archiveNumber").value;
+
+            if (name && column && shelf && archive) {
+                var table = document.getElementById("employeeTable").getElementsByTagName('tbody')[0];
+                var newRow = table.insertRow(table.rows.length);
+
+                var nameCell = newRow.insertCell(0);
+                var columnCell = newRow.insertCell(1);
+                var shelfCell = newRow.insertCell(2);
+                var archiveCell = newRow.insertCell(3);
+                var editCell = newRow.insertCell(4);
+                var deleteCell = newRow.insertCell(5);
+
+                nameCell.innerHTML = name;
+                columnCell.innerHTML = column;
+                shelfCell.innerHTML = shelf;
+                archiveCell.innerHTML = archive;
+
+                // إضافة زر تعديل وحذف
+                editCell.innerHTML = '<button onclick="editEmployee(this)">تعديل</button>';
+                deleteCell.innerHTML = '<button onclick="deleteEmployee(this)">حذف</button>';
+
+                // تفريغ الحقول بعد الإضافة
+                document.getElementById("employeeName").value = "";
+                document.getElementById("columnNumber").value = "";
+                document.getElementById("shelfNumber").value = "";
+                document.getElementById("archiveNumber").value = "";
+            } else {
+                alert("يرجى ملء جميع الحقول!");
+            }
+        }
+
+        // دالة للبحث عن موظف
+        function searchEmployee() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("employeeTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // دالة لحذف موظف
+        function deleteEmployee(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        // دالة لتعديل بيانات موظف
+        function editEmployee(button) {
+            var row = button.parentNode.parentNode;
+            var name = row.cells[0].innerHTML;
+            var column = row.cells[1].innerHTML;
+            var shelf = row.cells[2].innerHTML;
+            var archive = row.cells[3].innerHTML;
+
+            // تعبئة البيانات في الحقول لتمكين التعديل
+            document.getElementById("employeeName").value = name;
+            document.getElementById("columnNumber").value = column;
+            document.getElementById("shelfNumber").value = shelf;
+            document.getElementById("archiveNumber").value = archive;
+
+            // حذف الصف الحالي لتحديثه لاحقاً بعد التعديل
+            deleteEmployee(button);
+        }
+    </script>
+
+</body>
+</html>
